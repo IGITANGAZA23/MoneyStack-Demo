@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Drill, Home, Banknote, ShieldCheck } from "lucide-react";
+import { ArrowRight, Drill, Home as HomeIcon, Banknote, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
@@ -58,7 +58,7 @@ export default function Home() {
               <div className="bg-background rounded-2xl p-8 shadow-sm border hover:shadow-md transition-all hover:border-emerald-200 cursor-pointer h-full relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 group-hover:w-2 transition-all" />
                 <div className="h-12 w-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-6">
-                  <Home className="h-6 w-6" />
+                  <HomeIcon className="h-6 w-6" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">Spaces</h3>
                 <p className="text-muted-foreground mb-4">Rent a studio for a day, book a meeting room, or list your garage.</p>
