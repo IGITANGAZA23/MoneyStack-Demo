@@ -1,136 +1,248 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Drill, Home as HomeIcon, Banknote, ShieldCheck } from "lucide-react";
+import { ArrowRight, Drill, Home as HomeIcon, Banknote, ShieldCheck, Sparkles, Zap, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative overflow-hidden bg-background">
+      {/* Dynamic Background Elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full animate-pulse-slow" />
+        <div className="absolute bottom-[20%] right-[-5%] w-[30%] h-[30%] bg-secondary/10 blur-[100px] rounded-full animate-float" />
+        <div className="absolute top-[30%] left-[60%] w-[25%] h-[25%] bg-accent/10 blur-[80px] rounded-full animate-pulse-slow" />
+      </div>
+
       {/* Hero Section */}
-      <section className="relative px-6 pt-16 md:pt-24 lg:pt-32 pb-16 overflow-hidden">
+      <section className="relative px-6 pt-24 md:pt-32 lg:pt-40 pb-20">
         <div className="container mx-auto relative z-10 text-center">
-          <Badge variant="secondary" className="mb-4 text-emerald-700 bg-emerald-100 hover:bg-emerald-200">
-            Trusted by 10,000+ neighbors
-          </Badge>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-blue-600 via-emerald-600 to-orange-500 bg-clip-text text-transparent pb-2">
-            Share More. Own Less. <br className="hidden md:block" /> Trust Completely.
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+            <Sparkles className="h-3 w-3" />
+            Empowering 10,000+ neighbors
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 leading-[1.1]">
+            <span className="text-foreground">Share More.</span> <br />
+            <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent italic">Own Less.</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            Nexus Lend is the unified marketplace for lending things, renting spaces, and peer-to-peer funding.
-            built on a foundation of community trust.
+          
+          <p className="text-lg md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
+            The world's most trusted unified marketplace for borrowing high-end things, 
+            booking unique spaces, and securing community funding.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
             <Link href="/things">
-              <Button size="lg" className="h-12 px-8 text-base">Start Exploring</Button>
+              <Button size="lg" className="h-14 px-10 text-lg font-semibold rounded-full shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all hover:-translate-y-1">
+                Start Exploring
+              </Button>
             </Link>
             <Link href="/about">
-              <Button size="lg" variant="outline" className="h-12 px-8 text-base">How it works</Button>
+              <Button size="lg" variant="ghost" className="h-14 px-10 text-lg font-semibold rounded-full hover:bg-muted group">
+                How it works 
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </Link>
           </div>
         </div>
+      </section>
 
-        {/* Background Decorative Blobs */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -z-10 w-[800px] h-[800px] opacity-10 blur-3xl rounded-full bg-gradient-to-tr from-blue-400 to-emerald-400 pointer-events-none" />
+      {/* Stats Section */}
+      <section className="py-12 border-y bg-muted/30">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { label: "Items Shared", value: "25k+", icon: Zap },
+              { label: "Active Users", value: "12k+", icon: Users },
+              { label: "Trust Score", value: "4.9/5", icon: ShieldCheck },
+              { label: "Community Fund", value: "$2.4M", icon: Banknote },
+            ].map((stat, i) => (stat && (
+              <div key={i} className="flex flex-col items-center text-center">
+                <stat.icon className="h-6 w-6 text-primary mb-3" />
+                <div className="text-3xl font-bold">{stat.value}</div>
+                <div className="text-sm text-muted-foreground">{stat.label}</div>
+              </div>
+            )))}
+          </div>
+        </div>
       </section>
 
       {/* Categories Grid */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-6">
-          <h2 className="text-2xl font-bold mb-10 text-center">One Account. Three Journeys.</h2>
-          <div className="grid md:grid-cols-3 gap-8">
+      <section className="py-24 relative">
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div className="max-w-2xl text-left">
+              <Badge variant="outline" className="mb-4 border-primary/20 text-primary">Unprecedented Versatility</Badge>
+              <h2 className="text-4xl md:text-5xl font-bold">One Account. <span className="text-primary italic">Three Infinite Journeys.</span></h2>
+            </div>
+            <p className="text-muted-foreground text-lg max-w-sm text-left md:text-right">
+              Whether it's physical assets, square footage, or financial capital, we've got you covered.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Things */}
-            <Link href="/things" className="group">
-              <div className="bg-background rounded-2xl p-8 shadow-sm border hover:shadow-md transition-all hover:border-blue-200 cursor-pointer h-full relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 group-hover:w-2 transition-all" />
-                <div className="h-12 w-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-6">
-                  <Drill className="h-6 w-6" />
+            <Link href="/things" className="group h-full">
+              <div className="glass-card rounded-[2rem] p-10 h-full flex flex-col justify-between group-hover:-translate-y-2 transition-all">
+                <div>
+                  <div className="h-16 w-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
+                    <Drill className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-3xl font-bold mb-4 tracking-tight">Things</h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+                    Unlock access to premium gear without the high cost of ownership. From industrial tools to high-end cameras.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Things</h3>
-                <p className="text-muted-foreground mb-4">Borrow a pressure washer, lend a camera, or rent powerful tools nearby.</p>
-                <span className="text-blue-600 font-medium flex items-center text-sm group-hover:translate-x-1 transition-transform">
-                  Explore Things <ArrowRight className="ml-1 h-4 w-4" />
-                </span>
+                <div className="flex items-center text-primary font-bold text-lg">
+                  Explore Gear <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                </div>
               </div>
             </Link>
 
             {/* Spaces */}
-            <Link href="/spaces" className="group">
-              <div className="bg-background rounded-2xl p-8 shadow-sm border hover:shadow-md transition-all hover:border-emerald-200 cursor-pointer h-full relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500 group-hover:w-2 transition-all" />
-                <div className="h-12 w-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-6">
-                  <HomeIcon className="h-6 w-6" />
+            <Link href="/spaces" className="group h-full">
+              <div className="glass-card rounded-[2rem] p-10 h-full flex flex-col justify-between group-hover:-translate-y-2 transition-all">
+                <div>
+                  <div className="h-16 w-16 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
+                    <HomeIcon className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-3xl font-bold mb-4 tracking-tight">Spaces</h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+                    Find the perfect environment for your next project. Studios, darkrooms, workshops, or even entire garages.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Spaces</h3>
-                <p className="text-muted-foreground mb-4">Rent a studio for a day, book a meeting room, or list your garage.</p>
-                <span className="text-emerald-600 font-medium flex items-center text-sm group-hover:translate-x-1 transition-transform">
-                  Find Spaces <ArrowRight className="ml-1 h-4 w-4" />
-                </span>
+                <div className="flex items-center text-secondary font-bold text-lg">
+                  Find Space <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                </div>
               </div>
             </Link>
 
             {/* Funds */}
-            <Link href="/funds" className="group">
-              <div className="bg-background rounded-2xl p-8 shadow-sm border hover:shadow-md transition-all hover:border-orange-200 cursor-pointer h-full relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-orange-500 group-hover:w-2 transition-all" />
-                <div className="h-12 w-12 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center mb-6">
-                  <Banknote className="h-6 w-6" />
+            <Link href="/funds" className="group h-full">
+              <div className="glass-card rounded-[2rem] p-10 h-full flex flex-col justify-between group-hover:-translate-y-2 transition-all">
+                <div>
+                  <div className="h-16 w-16 rounded-2xl bg-accent/10 text-accent flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
+                    <Banknote className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-3xl font-bold mb-4 tracking-tight">Funds</h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed mb-8">
+                    Empower your dreams or help others achieve theirs through transparent, secure peer-to-peer micro-loans.
+                  </p>
                 </div>
-                <h3 className="text-xl font-bold mb-2">Funds</h3>
-                <p className="text-muted-foreground mb-4">Responsible peer-to-peer loans. Invest in your community or get funded.</p>
-                <span className="text-orange-600 font-medium flex items-center text-sm group-hover:translate-x-1 transition-transform">
-                  View Funds <ArrowRight className="ml-1 h-4 w-4" />
-                </span>
+                <div className="flex items-center text-accent font-bold text-lg">
+                  View Wealth <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
+                </div>
               </div>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Trust Section */}
-      <section className="py-20">
+      {/* Feature Section: Trust */}
+      <section className="py-32 bg-mesh text-white dark">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center gap-12">
-            <div className="flex-1">
-              <Badge className="mb-4">Trust First</Badge>
-              <h2 className="text-3xl font-bold mb-6">Built on a Foundation of Trust</h2>
-              <ul className="space-y-6">
-                <li className="flex gap-4">
-                  <div className="h-10 w-10 shrink-0 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                    <ShieldCheck className="h-5 w-5" />
+          <div className="flex flex-col lg:flex-row items-center gap-20">
+            <div className="flex-1 space-y-10">
+              <Badge className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">Security Protocol</Badge>
+              <h2 className="text-5xl md:text-6xl font-black leading-tight italic">
+                Built on a <br />Foundation of <br />Absolute Trust.
+              </h2>
+              <div className="space-y-8">
+                <div className="flex gap-6">
+                  <div className="h-14 w-14 shrink-0 rounded-2xl bg-white/10 flex items-center justify-center text-primary border border-white/10">
+                    <ShieldCheck className="h-7 w-7" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg">Identity Verification</h4>
-                    <p className="text-muted-foreground">Every user is verified via government ID before they can rent or lend high-value assets.</p>
-                  </div>
-                </li>
-                <li className="flex gap-4">
-                  <div className="h-10 w-10 shrink-0 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                    <ShieldCheck className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-lg">Smart TrustScore™</h4>
-                    <p className="text-muted-foreground">See a user's reputation at a glance, aggregated from all their activities across Things, Spaces, and Funds.</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div className="flex-1 bg-muted/50 rounded-3xl p-8 min-h-[300px] flex items-center justify-center">
-              {/* Visual placeholder for Trust Profile */}
-              <div className="bg-background p-6 rounded-xl shadow-lg max-w-sm w-full">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="h-12 w-12 bg-gray-200 rounded-full" />
-                  <div>
-                    <div className="h-4 w-32 bg-gray-200 rounded mb-2" />
-                    <div className="h-3 w-16 bg-gray-100 rounded" />
+                    <h4 className="font-bold text-xl mb-2">Identity Verification 2.0</h4>
+                    <p className="text-white/60 text-lg">Military-grade KYC verification ensures every member is exactly who they say they are.</p>
                   </div>
                 </div>
-                <div className="h-2 w-full bg-gray-100 rounded mb-2" />
-                <div className="h-2 w-2/3 bg-gray-100 rounded" />
+                <div className="flex gap-6">
+                  <div className="h-14 w-14 shrink-0 rounded-2xl bg-white/10 flex items-center justify-center text-secondary border border-white/10">
+                    <Users className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-xl mb-2">Neural TrustScore™</h4>
+                    <p className="text-white/60 text-lg">An AI-driven reputation engine that monitors transaction health across all categories in real-time.</p>
+                  </div>
+                </div>
               </div>
+            </div>
+            
+            <div className="flex-1 relative">
+              <div className="relative z-10 glass rounded-[2.5rem] p-12 border-white/5 shadow-2xl overflow-hidden group">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 blur-3xl -z-10" />
+                <div className="flex items-center gap-6 mb-12">
+                  <div className="h-20 w-20 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg">
+                    JD
+                  </div>
+                  <div>
+                    <div className="h-6 w-48 bg-white/20 rounded-full mb-3" />
+                    <div className="h-4 w-24 bg-white/10 rounded-full" />
+                  </div>
+                  <div className="ml-auto flex flex-col items-end">
+                    <div className="text-sm font-bold text-primary mb-1 uppercase tracking-widest">TrustScore</div>
+                    <div className="text-4xl font-black text-white italic">98</div>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-full w-[98%] bg-gradient-to-r from-primary to-secondary" />
+                  </div>
+                  <div className="flex justify-between text-sm text-white/40 font-medium">
+                    <span>Verified neighbor since 2024</span>
+                    <span>Superior Reliability</span>
+                  </div>
+                </div>
+                <div className="mt-12 grid grid-cols-3 gap-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-24 rounded-xl bg-white/5 border border-white/5" />
+                  ))}
+                </div>
+              </div>
+              {/* Background Glow */}
+              <div className="absolute -inset-10 bg-primary/20 blur-[100px] opacity-50 -z-10 rounded-full translate-x-10 translate-y-10" />
             </div>
           </div>
         </div>
       </section>
+
+      {/* CTA Section */}
+      <section className="py-32 relative">
+        <div className="container mx-auto px-6 text-center">
+          <div className="max-w-4xl mx-auto glass p-16 md:p-24 rounded-[3rem] border-primary/10 shadow-huge">
+            <h2 className="text-4xl md:text-6xl font-black mb-10 tracking-tight leading-tight"> Ready to rethink <br /><span className="text-primary italic">ownership?</span></h2>
+            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Joint the revolution of sharing. Access everything you need, share everything you don't.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <Button size="lg" className="h-16 px-12 text-xl font-bold rounded-full transition-all hover:scale-105">
+                Join the Community
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-20 border-t bg-muted/20">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-10 text-center md:text-left">
+            <div>
+              <div className="text-3xl font-black italic text-primary mb-4 tracking-tighter">Nexus Lend.</div>
+              <p className="text-muted-foreground">The future of collaborative consumption.</p>
+            </div>
+            <div className="flex gap-10 text-sm font-bold uppercase tracking-widest text-muted-foreground">
+              <Link href="#" className="hover:text-primary transition-colors">Twitter</Link>
+              <Link href="#" className="hover:text-primary transition-colors">Instagram</Link>
+              <Link href="#" className="hover:text-primary transition-colors">LinkedIn</Link>
+            </div>
+            <div className="text-sm text-muted-foreground/60">
+              © 2026 Nexus Lend. All rights reserved.
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
