@@ -3,21 +3,36 @@
 import Link from 'next/link';
 import { UserButton, SignedIn, SignedOut, SignInButton } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Archive, Home, DollarSign, LayoutDashboard, MessageCircle, Plus, Shield, Menu } from 'lucide-react';
+import { Sparkles, Archive, Home, DollarSign, LayoutDashboard, MessageCircle, Plus, Shield, Menu, Sun, Moon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
+
+    // Check system preference
+    if (typeof window !== 'undefined') {
+      const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      setIsDark(darkQuery.matches);
+      document.documentElement.classList.toggle('dark', darkQuery.matches);
+    }
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isActive = (path: string) => pathname === path || pathname.startsWith(path + '/');
+  const toggleTheme = () => {
+    const newVal = !isDark;
+    setIsDark(newVal);
+    document.documentElement.classList.toggle('dark', newVal);
+  };
+
+  const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
 
   if (pathname === '/dashboard' || pathname === '/messages') {
     return null;
@@ -68,23 +83,30 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <button
+            onClick={toggleTheme}
+            className="h-10 w-10 flex items-center justify-center rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+          >
+            {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </button>
+
           <SignedIn>
             <div className="hidden sm:flex items-center gap-2">
-              <Link href="/messages">
-                <Button variant="ghost" size="icon" className="relative hover:bg-primary/10 hover:text-primary rounded-full">
-                  <MessageCircle className="h-5 w-5" />
-                  <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full animate-pulse" />
+              <Link href="/dashboard">
+                <Button variant="ghost" size="icon" className={`relative hover:bg-primary/10 hover:text-primary rounded-full transition-all ${isActive('/dashboard') ? 'text-primary bg-primary/10' : ''}`}>
+                  <LayoutDashboard className="h-5 w-5" />
                 </Button>
               </Link>
-              <Link href="/dashboard">
-                <Button variant="ghost" size="icon" className="hover:bg-primary/10 hover:text-primary rounded-full">
-                  <LayoutDashboard className="h-5 w-5" />
+              <Link href="/messages">
+                <Button variant="ghost" size="icon" className={`relative hover:bg-primary/10 hover:text-primary rounded-full transition-all ${isActive('/messages') ? 'text-primary bg-primary/10' : ''}`}>
+                  <MessageCircle className="h-5 w-5" />
+                  <span className="absolute top-1 right-1 h-2 w-2 bg-primary rounded-full animate-pulse" />
                 </Button>
               </Link>
             </div>
             <div className="h-8 w-[1px] bg-border mx-2 hidden sm:block" />
             <Link href="/create">
-              <Button size="sm" className="hidden md:flex gap-2 rounded-full px-6 font-bold shadow-md shadow-primary/20">
+              <Button size="sm" className="hidden md:flex gap-2 rounded-full px-6 font-bold shadow-md shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
                 <Plus className="h-4 w-4" />
                 Share
               </Button>
@@ -104,10 +126,10 @@ export default function Navbar() {
           <SignedOut>
             <div className="flex items-center gap-2">
               <SignInButton mode="modal">
-                <Button variant="ghost" className="font-bold rounded-full hover:bg-primary/5 px-6">Log In</Button>
+                <Button variant="ghost" className="font-bold rounded-full hover:bg-primary/5 px-6 transition-all">Log In</Button>
               </SignInButton>
               <SignInButton mode="modal">
-                <Button className="font-bold rounded-full px-8 shadow-lg shadow-primary/20">Join Nexus</Button>
+                <Button className="font-bold rounded-full px-8 shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">Join Nexus</Button>
               </SignInButton>
             </div>
           </SignedOut>

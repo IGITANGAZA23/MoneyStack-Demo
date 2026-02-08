@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   description: 'Lend, Rent, and Borrow with Trust.',
 }
 
+import { NexusProvider } from '@/context/NexusContext'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,10 +32,12 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         <ClerkProvider>
           <ConvexClientProvider>
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
+            <NexusProvider>
+              <Navbar />
+              <main className="flex-1">
+                {children}
+              </main>
+            </NexusProvider>
           </ConvexClientProvider>
         </ClerkProvider>
       </body>

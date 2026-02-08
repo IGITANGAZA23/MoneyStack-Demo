@@ -9,22 +9,26 @@ import {
   Search,
   Upload,
   Download,
-  Home,
-  CheckCircle,
-  ArrowRight,
   Plus,
   Bell,
   Wallet,
   Sparkles,
-  Zap
+  Zap,
+  ArrowRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useNexus } from "@/context/NexusContext";
 
 export default function DashboardPage() {
+  const { listings, borrowedItems, returnItem, removeListing } = useNexus();
   const [activeNav, setActiveNav] = useState('dashboard');
+
+  const myListings = listings.filter(l => l.isListedByMe);
+  const lendingOutCount = myListings.filter(l => l.status === 'borrowed').length;
+  const borrowingInCount = borrowedItems.length;
 
   const navItems = [
     { id: 'dashboard', label: 'Command', icon: LayoutGrid, href: '/dashboard' },
@@ -34,11 +38,9 @@ export default function DashboardPage() {
 
   return (
     <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-background relative">
-      {/* Decorative background for the dashboard */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10" />
       <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary/5 blur-[100px] rounded-full -z-10" />
 
-      {/* Sidebar */}
       <aside className="w-80 glass border-r border-primary/5 flex flex-col p-8 overflow-y-auto m-4 rounded-[3rem] shadow-huge shrink-0">
         <div className="flex items-center gap-4 mb-14 px-2">
           <div className="bg-primary h-12 w-12 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/30 rotate-6">
@@ -79,7 +81,6 @@ export default function DashboardPage() {
           </Link>
         </nav>
 
-        {/* Reputation Card */}
         <div className="mt-auto p-8 rounded-[2rem] bg-mesh text-white relative overflow-hidden group">
           <div className="absolute inset-0 bg-black/20 backdrop-blur-sm -z-10" />
           <div className="flex flex-col items-center text-center">
@@ -90,9 +91,7 @@ export default function DashboardPage() {
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <main className="flex-1 flex flex-col overflow-hidden m-4 ml-0">
-        {/* Header */}
         <header className="h-24 glass rounded-[2.5rem] border-primary/5 flex items-center justify-between px-10 mb-6 shadow-sm shrink-0">
           <div className="flex items-center gap-8 w-1/2">
             <div className="relative w-full max-w-md group">
@@ -128,22 +127,22 @@ export default function DashboardPage() {
           </div>
         </header>
 
-        {/* Dynamic Canvas */}
-        <div className="flex-1 overflow-y-auto pr-4 space-y-8 pb-10">
+        <div className="flex-1 overflow-y-auto pr-4 space-y-8 pb-10 scrollbar-hide">
           <div className="flex flex-col gap-2 mb-10">
-            <Badge variant="outline" className="w-fit mb-2 border-primary/20 text-primary font-black px-4 italic uppercase tracking-widest">Live Status</Badge>
+            <Badge variant="outline" className="w-fit mb-2 border-primary/20 text-primary font-black px-4 italic uppercase tracking-widest">Live Pulse</Badge>
             <h2 className="text-6xl font-black tracking-tighter italic">Welcome back, <span className="text-primary underline decoration-primary/10 underline-offset-8">Alex.</span></h2>
           </div>
 
-          {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="glass-card p-8 rounded-[2.5rem] flex items-center gap-6 group hover:-translate-y-2 transition-all">
               <div className="size-20 rounded-3xl bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
                 <Upload className="h-10 w-10" />
               </div>
               <div>
-                <p className="text-4xl font-black tracking-tighter italic">04</p>
-                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">Lending Out</p>
+                <p className="text-4xl font-black tracking-tighter italic">
+                  {myListings.length.toString().padStart(2, '0')}
+                </p>
+                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">My Listings</p>
               </div>
             </div>
 
@@ -152,79 +151,104 @@ export default function DashboardPage() {
                 <Download className="h-10 w-10" />
               </div>
               <div>
-                <p className="text-4xl font-black tracking-tighter italic">02</p>
+                <p className="text-4xl font-black tracking-tighter italic">
+                  {borrowingInCount.toString().padStart(2, '0')}
+                </p>
                 <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">Borrowing In</p>
               </div>
             </div>
 
-            <div className="glass-card p-8 rounded-[2.5rem] flex items-center gap-6 group hover:-translate-y-2 transition-all border-accent/10">
-              <div className="size-20 rounded-3xl bg-accent/10 flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
-                <Wallet className="h-10 w-10" />
+            <div className="glass-card p-8 rounded-[2.5rem] flex items-center gap-6 group hover:-translate-y-2 transition-all border-accent/10 text-accent">
+              <div className="size-20 rounded-3xl bg-accent/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Zap className="h-10 w-10" />
               </div>
               <div>
-                <p className="text-4xl font-black tracking-tighter italic">$2.5k</p>
-                <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">Active Capital</p>
+                <p className="text-4xl font-black tracking-tighter italic">Active</p>
+                <p className="text-xs font-black uppercase tracking-widest opacity-70 mt-1">Ecosystem Status</p>
               </div>
             </div>
           </div>
 
-          {/* Main Visual Center */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Visual Analytics Hub */}
-            <div className="lg:col-span-3 glass-card p-10 rounded-[3rem] border-primary/5">
-              <div className="flex justify-between items-center mb-10">
-                <h3 className="text-2xl font-black tracking-tighter italic uppercase">Network Contribution</h3>
-                <div className="flex gap-4">
-                  <Button variant="outline" size="sm" className="rounded-full px-6 font-bold">Monthly</Button>
-                  <Button variant="ghost" size="sm" className="rounded-full px-6 font-bold">Annual</Button>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Lending Section */}
+            <div className="glass pb-8 rounded-[3rem] border-primary/5 flex flex-col min-h-[400px]">
+              <div className="p-10 flex justify-between items-center">
+                <h3 className="text-2xl font-black tracking-tighter italic uppercase">My Offerings</h3>
+                <Badge className="bg-primary/10 text-primary">{myListings.length} Active</Badge>
               </div>
-              <div className="h-[300px] w-full flex items-end justify-between px-10 gap-4">
-                {[60, 85, 70, 95, 75, 45, 80, 65].map((height, i) => (
-                  <div key={i} className="flex-1 flex flex-col items-center gap-4 group/bar">
-                    <div
-                      className="w-full bg-primary/20 rounded-2xl group-hover/bar:bg-primary transition-all duration-500 cursor-pointer shadow-inner"
-                      style={{ height: `${height}%` }}
-                    />
-                    <span className="text-[10px] font-black text-muted-foreground/50 opacity-0 group-hover/bar:opacity-100 transition-opacity">JAN {i + 1}</span>
+              <div className="flex-1 px-4 space-y-4">
+                {myListings.map((item) => (
+                  <div key={item.id} className="glass-card p-6 rounded-[2rem] border-white/5 flex items-center justify-between group hover:bg-white/5 transition-all">
+                    <div className="flex items-center gap-4">
+                      <div className="size-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary font-black italic">
+                        {item.name[0]}
+                      </div>
+                      <div>
+                        <p className="text-md font-black italic tracking-tight">{item.name}</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">${item.price}/day • {item.category}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Badge variant={item.status === 'borrowed' ? 'default' : 'secondary'} className="rounded-full">
+                        {item.status === 'borrowed' ? 'Rented Out' : 'Available'}
+                      </Badge>
+                      <Button variant="ghost" size="icon" onClick={() => removeListing(item.id)} className="rounded-full h-10 w-10 text-destructive hover:bg-destructive/10">
+                        <Plus className="rotate-45 h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
+                {myListings.length === 0 && (
+                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground p-10 text-center">
+                    <p className="italic font-medium">You haven't listed anything yet.</p>
+                    <Link href="/create">
+                      <Button variant="link" className="text-primary font-black underline">Broadcast an Asset</Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Quick Actions / Action Center */}
-            <div className="glass p-10 rounded-[3rem] border-primary/5 flex flex-col">
-              <h3 className="text-2xl font-black tracking-tighter italic uppercase mb-10">Pipeline</h3>
-              <div className="flex flex-col gap-6 flex-1">
-                {[
-                  { title: "Approve Lease", sub: "Sarah J. • Drill", icon: CheckCircle, color: "primary" },
-                  { title: "Sign Agreement", sub: "Mike T. • Camera", icon: MessageCircle, color: "secondary" },
-                  { title: "Review Funds", sub: "Bakery Expansion", icon: Wallet, color: "accent" },
-                ].map((action, i) => (
-                  <div key={i} className="flex gap-5 p-6 rounded-[2rem] bg-background/50 cursor-pointer hover:bg-muted transition-all border border-border/50 group/item">
-                    <div className={`size-12 shrink-0 rounded-2xl bg-${action.color}/10 flex items-center justify-center text-${action.color}`}>
-                      <action.icon className="h-6 w-6 group-hover/item:scale-110 transition-transform" />
+            {/* Borrowing Section */}
+            <div className="glass pb-8 rounded-[3rem] border-secondary/5 flex flex-col min-h-[400px]">
+              <div className="p-10 flex justify-between items-center">
+                <h3 className="text-2xl font-black tracking-tighter italic uppercase">Connections</h3>
+                <Badge variant="secondary" className="bg-secondary/10 text-secondary">{borrowedItems.length} Flux</Badge>
+              </div>
+              <div className="flex-1 px-4 space-y-4">
+                {borrowedItems.map((item) => (
+                  <div key={item.id} className="glass-card p-6 rounded-[2rem] border-white/5 flex items-center justify-between group hover:bg-white/5 transition-all">
+                    <div className="flex items-center gap-4">
+                      <div className="size-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary font-black italic">
+                        {item.name[0]}
+                      </div>
+                      <div>
+                        <p className="text-md font-black italic tracking-tight">{item.name}</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">From {item.provider} • Active</p>
+                      </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-md font-black italic tracking-tight truncate">{action.title}</p>
-                      <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mt-1 truncate">{action.sub}</p>
-                    </div>
+                    <Button onClick={() => returnItem(item.id)} variant="outline" className="rounded-full h-10 px-4 font-black text-xs uppercase italic hover:bg-secondary hover:text-white transition-all">
+                      Disconnect
+                    </Button>
                   </div>
                 ))}
+                {borrowedItems.length === 0 && (
+                  <div className="h-full flex flex-col items-center justify-center text-muted-foreground p-10 text-center">
+                    <p className="italic font-medium">No active neural bridges detected.</p>
+                    <Link href="/things">
+                      <Button variant="link" className="text-secondary font-black underline">Explore Inventory</Button>
+                    </Link>
+                  </div>
+                )}
               </div>
-
-              <Button className="mt-10 h-16 rounded-2xl font-black group" variant="outline">
-                View Protocol Logs <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-2 transition-transform" />
-              </Button>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Floating Action Menu */}
       <div className="fixed bottom-10 right-10 flex flex-col gap-4">
         <Link href="/create">
-          <Button size="lg" className="h-20 w-20 rounded-full bg-primary shadow-2xl shadow-primary/40 hover:scale-110 transition-all flex items-center justify-center p-0 group">
+          <Button size="lg" className="h-20 w-20 rounded-full bg-primary shadow-2xl shadow-primary/40 hover:scale-110 transition-all flex items-center justify-center p-0 group border-none">
             <Plus className="h-10 w-10 text-white group-hover:rotate-90 transition-transform duration-500" />
           </Button>
         </Link>
